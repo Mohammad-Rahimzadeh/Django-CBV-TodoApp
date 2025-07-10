@@ -59,11 +59,6 @@ class Item(models.Model):
 
         if self.due_date < today:
             raise ValidationError("due date cannot be in the past.")
-        
-    # def hide_past_items():
-    #     today = date.today()
-    #     past_items = Item.objects.filter(due_date__lt=today, show_item=True)
-    #     past_items.update(show_item=False)
 
     @property
     def is_expired(self):
