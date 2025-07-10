@@ -1,0 +1,86 @@
+{% extends "todo/main.html" %}
+{% load static %}
+
+
+
+
+{% block pageTitle %}
+    Update task - {{ item.title }}
+{% endblock pageTitle %}
+    
+
+
+
+{% block mainContent %}
+
+    <div class="col-1">
+        <a href="{% url 'todo:list-item' %}" class="back-arrow">
+            &#8617;
+        </a>
+    </div>
+    <div class="row page-title" style="margin-left: 16%;">
+        <div class="col-1"></div>
+        <div class="col-md-1">
+            <img src="{% static 'todo/images/edit.png' %}" class="icon"> 
+        </div>
+        <div class="col-md-10">
+            <span class="label text-primary">Update {{ item.title }}</span>
+        </div>
+    </div>
+    <div class="row ">
+        <form method="post" class="form update-item-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-7">
+                    <input type="text" name="title" class="form-control bg-dark title-input" value="{{ item.title }}">
+                </div>
+                <div class="col-2">
+                    <select class="form-select bg-dark priority" name="priority">
+                        <option selected>{{ item.priority }}</option>
+                        <option value="High priority" class="select priority-option">High priority</option>
+                        <option value="Medium priority" class="select priority-option">Medium priority</option>
+                        <option value="Low priority" class="select priority-option">Low priority</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-9">
+                    <textarea name="note" class="form-control bg-dark note-input">{{ item.note }}</textarea>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 3%; margin-left: 6%;">
+                <div class="col-3"></div>
+                <div class="col-2">
+                    <input type="time" class="form-control bg-dark update-date" value="{{ item.due_time|time:'H:i' }}" name="due_time" id="due-time">
+                </div>
+                <div class="col-2">
+                    <input type="date" class="form-control bg-dark update-time" value="{{ item.due_date|date:'Y/m/d' }}" name="due_date" id="due-date" required>
+                </div>
+                <div class="col-4"></div>
+            </div>
+            <div class="row" style="margin-top: 3%; margin-left: 6%;">
+                <div class="col-3"></div>
+                <div class="col-3">
+                    {% if item.important %}
+                        <input type="checkbox" class="bg-dark text-light important" name="important"><span>Remove from important task</span>
+                    {% else %}
+                        <input type="checkbox" class="bg-dark text-light important" name="important"><span>Add To Important Task</span>
+                    {% endif %}
+                </div>
+                <div class="col-1"></div>
+                <div class="col-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-9">
+                    <button class="btn btn-primary save-btn" type="submit">
+                            Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock mainContent %}
+    

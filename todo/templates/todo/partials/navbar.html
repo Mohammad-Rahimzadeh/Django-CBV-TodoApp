@@ -1,0 +1,49 @@
+{% load static %}
+
+
+
+<nav class="navbar navbar-expand">
+    <div class="container-fluid">
+        <a class="navbar-brand nav-link" href="{% url 'todo:list-item' %}">To Do</a>
+        <ul class="navbar-nav mb-2 mb-lg-0" style="width: 35%; margin-left: 18%;">
+            <form method='get' class="form d-flex search-form" action='{% url "todo:search-item" %}' role="search">
+                <input class="form form-control me-2" type="search" name='q' value='{{ request.GET.q }}' placeholder="Search" aria-label="Search">
+                <button class="btn" type="submit">Search</button>
+            </form>
+        </ul>
+        <ul class="navbar-nav" style="margin-right: 5%;">
+            
+            {% if request.user.is_authenticated %}
+            
+                {% if profile.image %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'account:profile' %}">
+                            <img src="{{ profile.image.url }}" class="img-fluid rounded mx-auto d-block user-profile" alt="user-profile">
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'account:profile' %}">
+                            <img src="{% static 'todo/images/user.png' %}" class="img-fluid rounded mx-auto d-block user-profile" alt="user-profile">
+                        </a>
+                        </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'account:logout' %}">Logout</a>
+                </li>
+            
+            {% else %}
+                <li class="nav-item">
+                    <img src="{% static 'todo/images/user.png' %}" class="img-fluid rounded mx-auto d-block user-profile" alt="user-profile">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'account:signup' %}">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'account:login' %}">Login</a>
+                </li>
+            {% endif %}
+                
+        </ul>
+    </div>
+</nav>

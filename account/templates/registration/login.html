@@ -1,0 +1,46 @@
+{% extends 'registration/main.html' %}
+{% load static %}
+
+
+{% block pageTitle %}
+
+    Todo App - Login
+
+{% endblock pageTitle %}
+
+
+{% block mainContent %}  
+
+
+    <div class="col-6 signup">
+        <div class="row page-title">
+            <div class="col-2 mx-auto">
+                <h2>
+                    Login
+                </h2>
+            </div>
+        </div>
+        <div class="registration-form">
+            <div class="col-6 mx-auto">
+                <form method="post" action="{% url 'account:login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="email" name="username" class="form-control bg-dark" placeholder="Email address">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="password" class="form-control bg-dark" placeholder="Password">
+                    </div>
+                    <div class="mb-3">
+                        <a href="{% url 'account:signup' %}">
+                            <small>
+                                Don't have an account?
+                            </small>
+                        </a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock mainContent %}

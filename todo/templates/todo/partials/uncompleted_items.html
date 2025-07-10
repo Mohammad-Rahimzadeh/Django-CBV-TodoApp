@@ -1,0 +1,80 @@
+{% load static %}
+
+
+
+<div class="row" style="margin-bottom: 2%;">
+                    
+    {% if item.complete is True %}
+        <div class="col-1" style="">
+            <img src="{% static 'todo/images/complete.png' %}" class="item-icon">
+        </div>
+    {% else %}
+        <div class="col-1" style="">
+            <img src="{% static 'todo/images/circle.png' %}" class="item-icon">
+        </div>
+    {% endif %}
+        
+    <div class="col-6" style="">
+        <h6 class="item-title">
+            <a href="{% url 'todo:single-item' item.pk %}">{{ item.title }}</a>
+            {% if item.note %}
+                <small> <b>Note:</b> {{ item.note|truncatechars:13 }}</small>
+            {% endif %}
+            <small style="float: right; margin-top: 0%;">
+                <b>Due Date:</b> {{ item.due_date|date:"F j"  }} - {{ item.due_time }}
+            </small>
+        </h6>
+    </div>
+    <div class="col-2" style="">
+        <h6 class="item-priority" style="{% if item.priority == 'High priority' %}
+                                            color: #56d340;
+                                        {% elif item.priority == 'Medium priority' %}
+                                            color:rgb(238, 255, 0);
+                                        {% else %}
+                                            color:rgb(255, 0, 0);
+                                        {% endif %}"">
+            {{ item.priority }}
+        </h6>
+    </div>
+    <div class="col-2" style="padding:auto;">
+        
+        {% if item.important is True %}
+            <form method='post' action="{% url 'todo:remove-important-item' item.pk %}" class="important-form">
+                {% csrf_token %}
+                <button type="submit" style="border: none; background: none;"  {% if item.complete is True %} disabled {% endif %}>
+                    <img src="{% static 'todo/images/important.png' %}" class="item-important">
+                </button>
+            </form>
+        {% else %}
+            <form method='post' action="{% url 'todo:add-important-item' item.pk %}" class="important-form">
+                {% csrf_token %}
+                <button type="submit" style="border: none; background: none;" {% if item.complete is True %} disabled {% endif %}>
+                    <img src="{% static 'todo/images/add-to-important.png' %}" class="item-important">
+                </button>
+            </form>
+        {% endif %}
+        {% if item.complete is False %}    
+            <a href="{% url 'todo:update-item' item.pk %}" class="btn edit-link"  >
+                <img src="{% static 'todo/images/edit.png' %}" class="item-edit">
+            </a>
+        {% endif %}
+        {% if item.complete is False %}
+            <form method='post' action="{% url 'todo:complete-item' item.pk %}" class="complete-form">
+                {% csrf_token %}
+                <button type="submit" style="border: none; background: none;">
+                    <img src="{% static 'todo/images/check.png' %}" class="item-complete">
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="col-1">
+        <form action="{% url 'todo:delete-item' item.pk %}" method="post" class="delete-item-form">
+            {% csrf_token %}
+            <button type="submit" style="border: none; background: none;">
+                <img src="{% static 'todo/images/delete.png' %}" class="item-delete">
+            </button>
+        </form>
+    </div>
+
+</div>

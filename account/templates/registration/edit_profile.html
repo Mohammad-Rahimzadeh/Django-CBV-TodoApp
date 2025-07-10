@@ -1,0 +1,77 @@
+{% extends "registration/main.html" %}
+{% load static %}
+
+
+{% block mainContent %}
+    <div class="row edit-profile">
+        <div class="col-1"></div>
+        <div class="col-1">
+            <a href="{% url 'account:profile' %}" class="back-arrow">
+                &#8617;
+            </a>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-6">
+            <div class="row page-title" style="margin-left: 11%;">
+                <div class="col-md-11">
+                    <img src="{% static 'registration/images/edit-profile.png' %}" class="icon">
+                    <span class="label">Edit Profile</span>
+                </div>
+                <div class="col-1"></div>
+            </div>
+            <div class="row">
+                <form method="post" class="form edit-profile-form" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-9">
+                            <input type="text" name="first_name" class="form-control bg-dark first-name-input" value="{{ profile.first_name }}">
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-9">
+                            <input type="text" name="last_name" class="form-control bg-dark last-name-input" value="{{ profile.last_name }}">
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-8">
+                            <input type="file" class="form-control" accept="image/*" name="image">
+                        </div>
+                        <div class="col-1">
+                            {% if profile.image %}
+                                <a href="{{ profile.image.url }}">
+                                    <img src="{{ profile.image.url }}" class="user-profile" alt="user-profile">
+                                </a>
+                            {% else %}
+                                <img src="{% static 'todo/images/user.png' %}" class="user-profile" alt="user-profile">
+                            {% endif %}
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-9">
+                            <input type="checkbox" name="image-clear">
+                            <label for="image_clear" style="color: #585858;">Remove Current Image</label>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-9">
+                            <button class="btn btn-primary save-btn" type="submit" style="width: 100%;">
+                                    Save
+                            </button>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+{% endblock %}

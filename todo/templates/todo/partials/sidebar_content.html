@@ -1,0 +1,32 @@
+{% load static %}
+
+<div class="col-md-2 sidebar-content">
+    <div class="row">
+        <small>
+            {{ get_current_date }} - {{ get_current_time }}
+        </small>
+        <div class="days-btn">
+            {% for day in upcoming_days %}
+                <a href="?day={{ day.name }}">{{ day.label|title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row btns-box">
+        <a href="{% url 'todo:list-item' %}" class="btn dashboard-buttons">
+            <img src="{% static 'todo/images/tasks.png' %}" class="icon"> 
+            <span class="label">Tasks</span>
+        </a>
+    </div>
+    <div class="row">
+        <a href="{% url 'todo:important-item' %}" class="btn dashboard-buttons">
+            <img src="{% static 'todo/images/star.png' %}" class="icon"> 
+            <span class="label">Important</span>
+        </a>
+    </div>
+    <div class="row">
+        <a href="{% url 'todo:expired-item' %}" class="btn dashboard-buttons">
+            <img src="{% static 'todo/images/expired.png' %}" class="icon"> 
+            <span class="label">Expired tasks</span>
+        </a>
+    </div>
+</div>

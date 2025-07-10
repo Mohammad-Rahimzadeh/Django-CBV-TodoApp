@@ -1,0 +1,182 @@
+{% extends 'registration/main.html' %}
+{% load static %}
+
+
+{% block pageTitle %}
+    
+    {% if profile.get_full_name %}
+        Profile - {{ profile.get_full_name }}
+    {% else %}
+        Profile - {{ profile.user.email }}
+    {% endif %}
+        
+{% endblock pageTitle %}
+
+
+
+<!-- ---------------------------------------  MAIN CONTENT -------------------------------------------- -->
+
+
+
+{% block mainContent %}  
+
+    <div class="row profile">
+
+        <div class="col-md-2 mx-auto text-center profile-sidebar">
+            <div class="row">
+                {% if profile.image %}
+                    <img src="{{ profile.image.url }}" class="img-fluid mx-auto d-block profile-image" alt="profile-image">
+                {% else %}
+                    <img src="{% static 'todo/images/user.png' %}" class="img-fluid rounded-circle mx-auto d-block profile-image" alt="profile-image">
+                {% endif %}
+            </div>
+
+            <div class="row" style="margin-top: 5%;">
+                <h6 class="profile-info">
+                    <b> {{ profile.get_full_name }}</b>
+                </h6>
+                <h6 class="profile-info">
+                    <b>{{ profile.user.email }}</b>
+                </h6>
+            </div>
+
+            <hr style="border:1px solid #585858;">
+
+            <div class='row'>
+                <a href='{% url "todo:list-item" %}' class=' btn profile-edit'>
+                    <img src="{% static 'todo/images/tasks.png' %}" class="icon"> 
+                    <span class="label">Tasks</span>
+                </a>
+                <a href='{% url "account:edit-profile" %}' class='btn profile-edit'>
+                    <img src="{% static 'todo/images/edit-profile.png' %}" class="icon"> 
+                    <span class="label">Edit Profile</span>
+                </a>
+                <a class="btn profile-logout" href="{% url 'account:logout' %}">
+                    <img src="{% static 'todo/images/logout.png' %}" class="icon"> 
+                    <span class="label">Logout</span>
+                </a>
+            </div>   
+        </div>
+
+
+
+        <div class="col-1"></div>
+        
+
+        
+        <div class="col-12 col-md-8 profile-main-section">
+            <div class="row">
+                {% if not profile.first_name %}
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <h3 class="alert text-light bg-dark text-center">
+                            Complete Your Personal Information
+                            <a href="{% url 'account:edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+                        </h3>
+                    </div>
+                    <div class="col-2"></div> 
+                {% endif %}
+            </div>
+
+            
+            
+            <div class="row all-items">
+                {% if all_tasks %}
+                    <h4 class="alert text-center mx-auto bg-dark text-light" style="margin-top: 2%;">
+                        All tasks
+                    </h4>
+                    <table class="item-table" style="margin-top: 2%;">
+                        <thead>
+                            <th>
+                                <p>Title</p>
+                            </th>
+                            <th>
+                                <p>Note</p>
+                            </th>
+                            <th>
+                                <p>Due Time</p>
+                            </th>
+                            <th>
+                                <p>Created at</p>
+                            </th>
+                            <th>
+                                <p>Priority</p>
+                            </th>
+                            <th>
+                                <p>Status</p>
+                            </th>
+                            <th>
+                                <p>Delete</p>
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for item in all_tasks %}
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <a href="{% url 'todo:single-item' item.pk %}">{{ item.title }}</a>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {% if item.note %}
+                                            <p>{{ item.note|truncatechars:13 }}</p>
+                                        {% else %}
+                                            <p>-</p>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <p>{{ item.due_date|date:"F j"  }} - {{ item.due_time }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ item.created_date  }}</p>
+                                    </td>
+                                    <td>
+                                        <p>{{ item.priority }}</p>
+                                    </td>
+                                    <td>
+                                        {% if item.complete is True %}
+                                            <img src="{% static 'registration/images/check.png' %}" class="item-complete">
+                                        {% else %}
+                                            <p>
+                                                Not Completed
+                                            </p>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form action="{% url 'todo:delete-item' item.pk %}?next={{ request.get_full_path }}" method="post" class="delete-item-form">
+                                            {% csrf_token %}
+                                            <button type="submit" style="border: none; background: none;">
+                                                <img src="{% static 'registration/images/delete.png' %}" class="item-delete">
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+
+            
+
+            <div class="row">
+                <h5 style="margin-top: 5%;">
+                    <b>Tasks Count: {{ profile.task_count }}</b>
+                </h5>
+                <h5>
+                    <b>Completed Tasks Count: {{ profile.completed_task_count }}</b>
+                </h5>
+            </div>
+        </div>
+
+
+
+        <div class="col-1"></div>
+
+
+
+
+    </div>
+    
+    
+{% endblock mainContent %}

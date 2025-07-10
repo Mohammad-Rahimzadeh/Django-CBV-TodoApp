@@ -1,0 +1,209 @@
+*{
+    margin: 0;
+    padding: 0;
+    scrollbar-width: none;
+    background-color: #191b1d;
+}
+
+
+/* ============================================== SIGNUP =============================================== */
+
+.signup{
+    margin: 5% auto;
+    min-height: 70vh;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 5px #585858;
+}
+.signup .page-title{
+    margin: 5% auto;
+    color: #fff;
+}
+.signup .row{
+    border-bottom: 1px solid #585858;
+}
+.signup .page-title h2{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+.signup .registration-form{
+    margin-top: 8%;
+}
+.signup .registration-form form{
+    color: #fff;
+}
+.signup .registration-form form input{
+    border:1px solid #585858;
+    color: #bfbfbf;
+}
+.signup .registration-form form input:focus{
+    box-shadow: none;
+}
+.signup .registration-form form a{
+    text-decoration: none;
+    color: #767676;
+    margin-left: 2%;
+}
+.signup .registration-form form a:hover{
+    color: #574eff;
+}
+.signup .registration-form form .btn{
+    width: 100%;
+    border-radius: 3px;
+    background-color: #3a2fff;
+    border: none;
+}
+.signup .registration-form form .btn:hover{
+    background-color: #221c8c;
+}
+
+
+
+
+/* ============================================== PROFILE =============================================== */
+
+
+.profile .profile-sidebar .profile-info{
+    color: #585858;
+    margin-top: 2%;
+}
+.profile .profile-sidebar{
+    min-height: 100vh;
+    padding-top: 3%;
+    border-right: 2px solid #717171;
+}
+.profile .profile-sidebar .icon{
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    background-color: transparent;
+}
+.profile .profile-sidebar .label {
+    background: transparent;
+    margin-left: 1%;
+}
+.profile .profile-sidebar .profile-image{
+    width: 170px;
+    height: 150px;
+    float: right;
+    background: transparent;
+    border-radius: 50%;
+    margin-top: 5%;
+}
+.profile .profile-sidebar .btn{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0px;
+    width: 100%;
+    padding: 1% 15%;
+    font-size: 1.1em;
+    background-color: transparent;
+}
+.profile .profile-sidebar .btn:hover{
+    background-color: #343434;
+    border-bottom: 3px solid #3a2fff;
+}
+.profile .profile-main-section{
+    padding-top: 3%;
+    min-height: 100vh;
+    /* border: 1px solid #fff; */
+}
+.profile .profile-main-section h5{
+    color: #585858;
+    text-align: center;
+}
+.profile .profile-main-section .all-items .item-table{
+    text-align: center;
+}
+.profile .profile-main-section .all-items .item-table thead{
+    border-bottom: 4px solid #585858;
+    color: #585858;
+    padding-top: 1%;
+}
+.profile .profile-main-section .all-items .item-table thead th{
+    padding-top: 1%;
+}
+.profile .profile-main-section .all-items .item-table tbody tr{
+    border-bottom: 1px solid #585858;
+}
+.profile .profile-main-section .all-items .item-table tbody tr td{
+    height: 7vh;
+    padding-top: 1%;
+}
+.profile .profile-main-section .all-items .item-table tbody tr td p, a{
+    color: #bfbfbf;
+    text-decoration: none;
+}
+.profile .profile-main-section .all-items .item-table tbody tr td .delete-item-form{
+    float: center;
+}
+.profile .profile-main-section .all-items .item-table tbody tr td .item-delete{
+    width: 20px;
+    height: 20px;
+    margin-bottom: 70%;
+}
+.profile .profile-main-section .all-items .item-table tbody tr td .item-complete{
+    width: 20px;
+    height: 20px;
+    margin-bottom: 10%;
+
+}
+
+
+
+
+/* ============================================== EDIT PROFILE =============================================== */
+
+
+.edit-profile{
+    margin-top: 5%;
+}
+.edit-profile .back-arrow{
+    color: #3a2fff;
+    font-size: 2em;
+    text-decoration: none;
+    float: left;
+}
+.edit-profile .page-title{
+    border-bottom: 1px solid #343434;
+    width: 74%;
+}
+.edit-profile .page-title .icon{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    background-color: transparent;
+    margin-bottom: 1%;
+}
+.edit-profile .page-title .label {
+    background: transparent;
+    font-size: 2em;
+    color: #fff;
+}
+.edit-profile .edit-profile-form{
+    margin-left: 2%;
+}
+.edit-profile .edit-profile-form input{
+    margin-top: 5%;
+    border:1px solid #585858;
+    color: #999999;
+}
+.edit-profile .edit-profile-form .user-profile{
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    margin-top: 60%;
+    border-radius: 20%;
+}
+.edit-profile .edit-profile-form .save-btn{
+    border-radius: 3px;
+    background-color: #3a2fff;
+    border: none;
+    margin-top: 10%;
+    width: 100%;
+}
+.edit-profile .edit-profile-form .save-btn:hover{
+    background-color: #221c8c;
+}

@@ -1,0 +1,198 @@
+{% extends 'todo/main.html' %}
+{% load static %}
+
+
+{% block pageTitle %}
+
+    Todo App - {{ item.title }}
+
+{% endblock pageTitle %}
+
+
+<!-- --------------------------------------- NAVBAR -------------------------------------------- -->
+
+{% block navbarContent %}
+
+    {% include 'todo/partials/navbar.html' %}
+         
+{% endblock navbarContent %}
+
+
+
+<!-- ---------------------------------------  MAIN CONTENT -------------------------------------------- -->
+
+{% block mainContent %}  
+
+    <div class="row page-title" style="margin-left:10%;">
+        <div class="col-md-1">
+            <img src="{% static 'todo/images/tasks.png' %}" class="icon"> 
+        </div>
+        <div class="col-md-11">
+            <span class="label">
+                {{ item.title }}
+                {% if item.important is True %}
+                    <img src="{% static 'todo/images/important.png' %}" class="item-important" style="width: 20px; height: 20px; margin-bottom: 0.5%;">
+                {% endif %}
+            </span>
+            <small style="float: right; color: #fff;">
+                {{ get_current_date }} - {{ get_current_time }}
+            </small>
+        </div>
+    </div>
+
+
+
+    <div class="row single-item">
+        <div class="col-7 details">
+            <div class="row" style="border-bottom: 1px solid #585858;">
+                <h4>
+                    <b>Note: </b>{{ item.note|linebreaks }}
+                </h4>
+                <h4>
+                    <b>Priority: </b>{{ item.priority }}
+                </h4>
+                <h4>
+                    <b>due: </b>{{ item.due_date }} - {{ item.due_time }}
+                </h4>
+            </div>
+            <div class="row" style="margin-top: 5%;">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="row">
+                        {% if item.important is True %}
+                            <form method='post' action="{% url 'todo:remove-important-item' item.pk %}?next={{ request.get_full_path }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary remove-important" {% if item.complete is True %} disabled {% endif %}>
+                                    Remove important
+                                </button>
+                            </form>
+                        {% else %}
+                            <form method='post' action="{% url 'todo:add-important-item' item.pk %}?next={{ request.get_full_path }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary add-important" {% if item.complete is True %} disabled {% endif %}>
+                                    Add important
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        {% if item.complete is False %}
+                            <form method='get' action="{% url 'todo:update-item' item.pk %}?next={{ request.get_full_path }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary edit-link">
+                                    Edit task
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        {% if item.complete is False %}
+                            <form method='post' action="{% url 'todo:complete-item' item.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary complete-item">
+                                    Completed
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        <form action="{% url 'todo:delete-item' item.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary delete-item">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-3"></div>  
+            </div>
+        </div>
+
+
+        <div class="col-4 remaining-time" style="border: 1px solid #585858;">
+            {% if item.complete is True %}
+                <div class="row">
+                    <h3 style="color: #0f0; font-weight:700;">
+                        Congrats {{ profile.first_name }}<br>Completed on time
+                    </h3>
+                </div>
+            {% else %}
+                <div class="row">
+                    <h3>
+                        Remaining Time
+                    </h3>
+                </div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-2">
+                        <img src="{% static 'todo/images/timer.png' %}" class="icon">
+                    </div>
+                    <div class="col-5">
+                        <h4>
+                            <span id="days" style="margin-top: 5%;"></span> day <br>
+                            <span id="time" style="margin-top: 8%;"></span>
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}    
+        </div>
+    </div>
+    
+{% endblock mainContent %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% block extraJS %}
+
+    <script>
+        const deadline = new Date(
+            "{{ item.due_date|date:'Y-m-d' }}T{{ item.due_time|time:'H:i:s' }}"
+        ).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = deadline - now;
+
+            const daysSpan = document.getElementById("days");
+            const timeSpan = document.getElementById("time");
+
+            if (distance < 0) {
+                daysSpan.innerHTML = "0";
+                timeSpan.innerHTML = "Expired";
+                timeSpan.classList.remove("urgent");
+                return;
+            }
+
+            const totalDays = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const totalHours = Math.floor(distance / (1000 * 60 * 60));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysSpan.innerHTML = totalDays;
+            timeSpan.innerHTML = `${hours}:${minutes}:${seconds}`;
+
+            if (totalDays === 0 && totalHours < 3) {
+                timeSpan.classList.add("urgent");
+            } else {
+                timeSpan.classList.remove("urgent");
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+
+{% endblock extraJS %}

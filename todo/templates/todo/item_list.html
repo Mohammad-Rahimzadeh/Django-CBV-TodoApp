@@ -1,0 +1,171 @@
+{% extends 'todo/main.html' %}
+{% load static %}
+
+
+{% block pageTitle %}
+
+    Todo App - Home
+
+{% endblock pageTitle %}
+
+
+<!-- --------------------------------------- NAVBAR -------------------------------------------- -->
+
+{% block navbarContent %}
+
+    {% include 'todo/partials/navbar.html' %}
+         
+{% endblock navbarContent %}
+
+
+
+<!-- --------------------------------------- DASHBOARD -------------------------------------------- -->
+
+{% block sidebarContent %}
+
+    {% include 'todo/partials/sidebar_content.html' %}
+                
+{% endblock sidebarContent %}
+
+
+
+<!-- ---------------------------------------  MAIN CONTENT -------------------------------------------- -->
+
+{% block mainContent %}  
+
+    <div class="row page-title">
+        <div class="col-md-1">
+            <img src="{% static 'todo/images/tasks.png' %}" class="icon"> 
+        </div>
+        <div class="col-md-11">
+            <span class="label">Tasks</span>
+        </div>
+    </div>
+    <div class="row">
+        <form method="post" action="{% url 'todo:create-item' %}" class="form add-item-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-4">
+                    <input type="text" name="title" class="form-control bg-dark add-input" placeholder="Add a task">
+                </div>
+                <div class="col-2">
+                    <input type="time" name="due_time" id="due-time" class="form-control bg-dark add-date">
+                </div>
+                <div class="col-2">
+                    <input type="date" name="due_date" id="due-date" class="form-control bg-dark add-time" required>
+                </div>
+                <div class="col-2">
+                    <select class="form-select bg-dark priority" name="priority">
+                        <option selected>Select priority</option>
+                        <option value="High priority" class="select priority-option">High priority</option>
+                        <option value="Medium priority" class="select priority-option">Medium priority</option>
+                        <option value="Low priority" class="select priority-option">Low priority</option>
+                    </select>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-primary add-btn" type="submit">
+                            Add
+                    </button>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </form>
+    </div>
+
+
+    
+        
+    {% if items %}
+
+        <div class="row items-list" style="margin-top: 5%; margin-left:1%; margin-right:1%;">
+            {% for item in items %}
+                {% if item.complete is False %}
+                    {% include 'todo/partials/uncompleted_items.html' %}
+                {% endif %}
+            {% endfor %}
+            <p style="color:#808080;">
+                Tasks Count: <b>{{ profile.task_count }}</b>
+            </p>
+        </div>
+
+        <div class="row items-list" style="margin-top: 3%; margin-left:10%; margin-right:10%;">
+            <h2 style="margin-top: 4%; color: #585858; margin-bottom:2%;">
+                Completed Tasks
+            </h2>
+            {% for item in items %}
+                {% if item.complete is True %}
+                    {% include 'todo/partials/completed_items.html' %}
+                {% endif %}
+            {% endfor %}
+
+            {% if item.complete is True %}
+                <small style="color:#808080; margin-bottom:15%;">
+                    Completed Task Count: <b>{{ profile.completed_task_count }}</b>
+                </small>
+            {% endif %}
+        </div>
+
+    {% else %}
+
+        <div class="row" style="margin-top: 5%; border-bottom: 0px;">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <h4 class="alert bg-dark text-light text-center">
+                    No Items found!
+                </h4>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+    {% endif %}
+
+
+
+
+
+{% endblock mainContent %}
+
+
+
+
+
+
+
+
+{% block extraJS %}
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const now = new Date();
+        const dateField = document.getElementById('due-date');
+        const timeField = document.getElementById('due-time');
+
+        const today = now.toISOString().split('T')[0];
+        if (dateField) {
+            dateField.value = today;
+            dateField.min = today;
+        }
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const currentTime = `${hours}:${minutes}`;
+        if (timeField) {
+            timeField.value = currentTime;
+        }
+
+        dateField.addEventListener("change", function () {
+            const selectedDate = new Date(this.value);
+            const selectedDateStr = selectedDate.toISOString().split('T')[0];
+            if (selectedDateStr === today && timeField) {
+                timeField.min = currentTime;
+            } else {
+                timeField.removeAttribute("min");
+            }
+        });
+    });
+    </script>
+
+
+
+    
+{% endblock extraJS %}
