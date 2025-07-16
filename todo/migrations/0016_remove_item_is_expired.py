@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0015_item_is_expired'),
+        ("todo", "0015_item_is_expired"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='item',
-            name='is_expired',
+            model_name="item",
+            name="is_expired",
         ),
     ]

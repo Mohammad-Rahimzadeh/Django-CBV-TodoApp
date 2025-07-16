@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from datetime import datetime, date, timedelta
-
+from datetime import date, timedelta
+from django.utils import timezone
 
 
 # getting user model object
@@ -10,33 +10,35 @@ from datetime import datetime, date, timedelta
 User = get_user_model()
 
 
-
 # Other functions
 
-def default_deadline_time():
-    return (datetime.now() + timedelta(minutes=1)).time()
 
+def default_deadline_time():
+    return (timezone.now() + timedelta(minutes=1)).time()
 
 
 # Create your models here.
 
+
 class Item(models.Model):
     class Meta:
-        verbose_name = 'Items'
-        verbose_name_plural = 'Items'
+        verbose_name = "Items"
+        verbose_name_plural = "Items"
 
     PRIORITY_STATUS_CHOICES = (
-        ('High priority' , 'High priority'),
-        ('Medium priority' , 'Medium priority'),
-        ('Low priority' , 'Low priority'),
+        ("High priority", "High priority"),
+        ("Medium priority", "Medium priority"),
+        ("Low priority", "Low priority"),
     )
 
-    author = models.ForeignKey(User , on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     complete = models.BooleanField(default=False)
     important = models.BooleanField(default=False)
-    note = models.TextField(blank=True, null=True, default='')
-    priority = models.CharField(max_length=15, choices=PRIORITY_STATUS_CHOICES, blank=True, null=True)
+    note = models.TextField(blank=True, null=True, default="")
+    priority = models.CharField(
+        max_length=15, choices=PRIORITY_STATUS_CHOICES, blank=True, null=True
+    )
     due_date = models.DateField(default=date.today)
     due_time = models.TimeField(default=default_deadline_time)
     remind_me = models.DateField(default=date.today)
@@ -47,10 +49,10 @@ class Item(models.Model):
     updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return '{}'.format(self.title)
-    
+        return "{}".format(self.title)
+
     def clean(self):
-        now = datetime.now()
+        now = timezone.now()
         now_time = now.time()
         today = date.today()
 
@@ -62,7 +64,7 @@ class Item(models.Model):
 
     @property
     def is_expired(self):
-        now = datetime.now()
+        now = timezone.now()
         if self.due_date < now.date():
             return True
         if self.due_date == now.date() and self.due_time < now.time():

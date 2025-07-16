@@ -4,8 +4,9 @@ from todo.models import Item
 
 User = get_user_model()
 
+
 class Command(BaseCommand):
-    help = 'Fix task counts for all users'
+    help = "Fix task counts for all users"
 
     def handle(self, *args, **kwargs):
         for user in User.objects.all():

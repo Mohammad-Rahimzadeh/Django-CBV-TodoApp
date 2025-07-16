@@ -7,28 +7,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0013_item_important'),
+        ("todo", "0013_item_important"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='item',
-            old_name='deadline_date',
-            new_name='due_date',
+            model_name="item",
+            old_name="deadline_date",
+            new_name="due_date",
         ),
         migrations.RenameField(
-            model_name='item',
-            old_name='deadline_time',
-            new_name='due_time',
+            model_name="item",
+            old_name="deadline_time",
+            new_name="due_time",
         ),
         migrations.AddField(
-            model_name='item',
-            name='remind_me',
+            model_name="item",
+            name="remind_me",
             field=models.DateField(default=datetime.date.today),
         ),
         migrations.AddField(
-            model_name='item',
-            name='show_item',
+            model_name="item",
+            name="show_item",
             field=models.BooleanField(default=True),
         ),
     ]

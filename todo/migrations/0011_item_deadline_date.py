@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0010_alter_item_priority'),
+        ("todo", "0010_alter_item_priority"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='deadline_date',
+            model_name="item",
+            name="deadline_date",
             field=models.DateField(default=datetime.date.today),
         ),
     ]

@@ -1,5 +1,7 @@
 from datetime import date
+
 from .models import Item
+
 
 def hide_past_items():
     today = date.today()

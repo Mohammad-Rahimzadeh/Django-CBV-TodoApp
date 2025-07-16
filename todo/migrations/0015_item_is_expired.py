@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0014_rename_deadline_date_item_due_date_and_more'),
+        ("todo", "0014_rename_deadline_date_item_due_date_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='is_expired',
+            model_name="item",
+            name="is_expired",
             field=models.BooleanField(default=False),
         ),
     ]

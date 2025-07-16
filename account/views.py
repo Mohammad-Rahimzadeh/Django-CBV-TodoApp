@@ -16,24 +16,22 @@ from .forms import SignupForm, EditProfileForm
 from todo.models import Item
 
 
-
 # Create your views here.
+
 
 class LoginView(LoginView):
     def get_success_url(self):
-        return reverse_lazy('todo:list-item') 
+        return reverse_lazy("todo:list-item")
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Invalid username or password')
+        messages.error(self.request, "Invalid username or password")
         return self.render_to_response(self.get_context_data(form=form))
-    
-
 
 
 class SignupView(FormView):
-    template_name = 'registration/signup.html'
+    template_name = "registration/signup.html"
     form_class = SignupForm
-    success_url = reverse_lazy('todo:list-item')
+    success_url = reverse_lazy("todo:list-item")
 
     def form_valid(self, form):
         user = form.save()
@@ -41,35 +39,30 @@ class SignupView(FormView):
         return super().form_valid(form)
 
 
-
-
 class ProfileView(LoginRequiredMixin, ListView):
     model = Profile
-    template_name = 'registration/profile.html'
+    template_name = "registration/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = Profile.objects.filter(user=self.request.user).first()
-        context['get_current_date'] = datetime.now().strftime("%Y/ %m/ %d")
-        context['get_current_time'] = timezone.now().time().strftime('%H:%M')
-        context['all_tasks'] = Item.objects.filter(author=self.request.user)
+        context["profile"] = Profile.objects.filter(user=self.request.user).first()
+        context["get_current_date"] = datetime.now().strftime("%Y/ %m/ %d")
+        context["get_current_time"] = timezone.now().time().strftime("%H:%M")
+        context["all_tasks"] = Item.objects.filter(author=self.request.user)
         return context
-    
 
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = EditProfileForm
-    template_name = 'registration/edit_profile.html'
-    success_url = reverse_lazy('account:profile')
+    template_name = "registration/edit_profile.html"
+    success_url = reverse_lazy("account:profile")
 
     def get_object(self, queryset=None):
         return self.request.user.profile.first()
-    
-
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('account:login')
+        return redirect("account:login")

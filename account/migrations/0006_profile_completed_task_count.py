@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0005_profile_task_count'),
+        ("account", "0005_profile_task_count"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='completed_task_count',
+            model_name="profile",
+            name="completed_task_count",
             field=models.PositiveIntegerField(default=0),
         ),
     ]

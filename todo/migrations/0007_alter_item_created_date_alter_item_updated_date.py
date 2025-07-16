@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0006_remove_item_deadline_item_deadline_date_and_more'),
+        ("todo", "0006_remove_item_deadline_item_deadline_date_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='item',
-            name='created_date',
+            model_name="item",
+            name="created_date",
             field=models.DateTimeField(auto_now_add=True, null=True),
         ),
         migrations.AlterField(
-            model_name='item',
-            name='updated_date',
+            model_name="item",
+            name="updated_date",
             field=models.DateTimeField(auto_now=True, null=True),
         ),
     ]

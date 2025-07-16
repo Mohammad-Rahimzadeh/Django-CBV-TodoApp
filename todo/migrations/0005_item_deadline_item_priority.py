@@ -7,18 +7,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todo', '0004_alter_item_author'),
+        ("todo", "0004_alter_item_author"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='deadline',
+            model_name="item",
+            name="deadline",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AddField(
-            model_name='item',
-            name='priority',
-            field=models.CharField(blank=True, choices=[('High', 'High'), ('Medium', 'Medium'), ('Low', 'Low')], max_length=10, null=True),
+            model_name="item",
+            name="priority",
+            field=models.CharField(
+                blank=True,
+                choices=[("High", "High"), ("Medium", "Medium"), ("Low", "Low")],
+                max_length=10,
+                null=True,
+            ),
         ),
     ]
