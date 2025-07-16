@@ -6,7 +6,7 @@ from account.models import User, Profile
 
 
 
-class TestItemModel(TestCase):
+class TestTodoModel(TestCase):
     def setUp(self):
         self.user = User.objects.create(email="test@test.com", password="13475479mr")
         self.profile = Profile.objects.create(
