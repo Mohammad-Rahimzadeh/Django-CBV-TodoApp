@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from ..forms import ItemCreateForm, ItemUpdateForm
 
 
-class TestForms(TestCase):
+class TestTodoForms(TestCase):
     def test_item_create_form_with_valid_data(self):
         due_time = (datetime.now() + timedelta(minutes=1)).strftime("%H:%M")
         form = ItemCreateForm(
