@@ -46,13 +46,13 @@ class TestForms(TestCase):
 
     def test_item_update_form_with_invalid_data(self):
         due_time = (datetime.now() + timedelta(minutes=20)).strftime("%H:%M")
-        tomorrow = datetime.now().date() + timedelta(days=-1)
+        yesterday = datetime.now().date() + timedelta(days=-1)
         form = ItemUpdateForm(
             data={
                 "title": "test",
                 "note": "test",
                 "priority": "High priority",
-                "due_date": tomorrow,
+                "due_date": yesterday,
                 "due_time": due_time,
                 "important": True,
             }
