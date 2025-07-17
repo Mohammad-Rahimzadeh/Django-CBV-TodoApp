@@ -29,7 +29,8 @@ class FilteredItemView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         hide_past_items()
 
-        base_queryset = self.model.objects.filter(author=self.request.user)
+        profile = Profile.objects.filter(user=self.request.user).first()
+        base_queryset = self.model.objects.filter(author=profile)
 
         now = timezone.now()
         today = now.date()
@@ -111,14 +112,16 @@ class SingleItemView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if obj.author != self.request.user:
+        profile = Profile.objects.filter(user=self.request.user).first()
+        if obj.author != profile:
             raise Http404("Not allowed.")
         return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(user=self.request.user)
         context["form"] = ItemCreateForm()
-        context["profile"] = Profile.objects.filter(user=self.request.user).first()
+        context["profile"] = profile
         context["get_current_date"] = timezone.now().strftime("%Y/ %m/ %d")
         context["get_current_time"] = timezone.now().time().strftime("%H:%M")
         return context
@@ -131,14 +134,16 @@ class CreateItemView(LoginRequiredMixin, CreateView):
     template_name = "todo/item_list.html"
 
     def get_context_data(self, **kwargs):
+        profile = Profile.objects.get(user=self.request.user)
         context = super().get_context_data(**kwargs)
-        context["items"] = Item.objects.filter(author=self.request.user, show_item=True)
-        context["profile"] = Profile.objects.filter(user=self.request.user).first()
+        context["items"] = Item.objects.filter(author=profile, show_item=True)
+        context["profile"] = profile
         context["get_current_date"] = timezone.localdate()
         return context
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.author = profile
         response = super().form_valid(form)
         profile = Profile.objects.filter(user=self.request.user).first()
         if profile:
@@ -157,7 +162,8 @@ class UpdateItemView(UpdateView):
     template_name = "todo/partials/item_edit_form.html"
 
     def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk, author=request.user)
+        profile = Profile.objects.get(user=self.request.user)
+        item = get_object_or_404(Item, pk=pk, author=profile)
         item.title = request.POST.get("title", item.title)
         item.note = request.POST.get("note", item.note)
         item.priority = request.POST.get("priority", item.priority)
@@ -173,8 +179,8 @@ class UpdateItemView(UpdateView):
 
 class DeleteItemView(View):
     def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk, author=request.user)
-        profile = request.user.profile.first()
+        profile = Profile.objects.get(user=self.request.user)
+        item = get_object_or_404(Item, pk=pk, author=profile)
         if profile:
             profile.task_count = max(0, profile.task_count - 1)
             if item.complete:
@@ -190,7 +196,8 @@ class DeleteItemView(View):
 
 class CompleteItemView(View):
     def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk, author=request.user)
+        profile = Profile.objects.get(user=self.request.user)
+        item = get_object_or_404(Item, pk=pk, author=profile)
         item.complete = True
         item.save()
 
@@ -207,7 +214,8 @@ class CompleteItemView(View):
 
 class AddToImportantItemView(View):
     def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk, author=request.user)
+        profile = Profile.objects.get(user=self.request.user)
+        item = get_object_or_404(Item, pk=pk, author=profile)
         item.important = True
         item.save()
         next_url = request.POST.get("next") or request.GET.get("next")
@@ -218,7 +226,8 @@ class AddToImportantItemView(View):
 
 class RemoveImportantItem(View):
     def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk, author=request.user)
+        profile = Profile.objects.get(user=self.request.user)
+        item = get_object_or_404(Item, pk=pk, author=profile)
         item.important = False
         item.save()
         next_url = request.POST.get("next") or request.GET.get("next")
@@ -230,7 +239,8 @@ class RemoveImportantItem(View):
 class SearchItemView(FilteredItemView):
     def get_queryset(self):
         query = self.request.GET.get("q")
-        queryset = self.model.objects.filter(author=self.request.user)
+        profile = Profile.objects.get(user=self.request.user)
+        queryset = self.model.objects.filter(author=profile)
         if query:
             queryset = queryset.filter(title__icontains=query)
         self.active_items = queryset
@@ -247,10 +257,11 @@ class ExpiredItemView(LoginRequiredMixin, ListView):
         now = timezone.now()
         today = now.date()
         now_time = now.time()
-
+        profile = Profile.objects.get(user=self.request.user)
+        
         return (
             Item.objects.filter(
-                author=self.request.user,
+                author=profile,
             )
             .filter(
                 (Q(due_date__lt=today)) | (Q(due_date=today) & Q(due_time__lt=now_time))

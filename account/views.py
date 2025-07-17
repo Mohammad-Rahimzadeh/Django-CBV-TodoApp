@@ -42,15 +42,15 @@ class SignupView(FormView):
 class ProfileView(LoginRequiredMixin, ListView):
     model = Profile
     template_name = "registration/profile.html"
-
+    
     def get_context_data(self, **kwargs):
+        profile = Profile.objects.get(user=self.request.user)
         context = super().get_context_data(**kwargs)
         context["profile"] = Profile.objects.filter(user=self.request.user).first()
         context["get_current_date"] = datetime.now().strftime("%Y/ %m/ %d")
         context["get_current_time"] = timezone.now().time().strftime("%H:%M")
-        context["all_tasks"] = Item.objects.filter(author=self.request.user)
+        context["all_tasks"] = Item.objects.filter(author=profile)
         return context
-
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
