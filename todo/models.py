@@ -1,13 +1,10 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from datetime import date, timedelta
 from django.utils import timezone
 
+from account.models import Profile
 
-# getting user model object
-
-User = get_user_model()
 
 
 # Other functions
@@ -31,7 +28,9 @@ class Item(models.Model):
         ("Low priority", "Low priority"),
     )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="profile"
+    )
     title = models.CharField(max_length=255)
     complete = models.BooleanField(default=False)
     important = models.BooleanField(default=False)
@@ -41,9 +40,7 @@ class Item(models.Model):
     )
     due_date = models.DateField(default=date.today)
     due_time = models.TimeField(default=default_deadline_time)
-    remind_me = models.DateField(default=date.today)
     show_item = models.BooleanField(default=True)
-    # is_expired = models.BooleanField(default=False)
 
     created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
